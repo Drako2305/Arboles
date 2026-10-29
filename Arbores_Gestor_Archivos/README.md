@@ -1,4 +1,4 @@
-# Arbores — Gestor jerárquico de archivos
+# Arboles — Gestor jerárquico de archivos
 
 Proyecto académico de Estructuras de Datos. Simula un explorador de archivos mediante un árbol n-ario implementado manualmente en Python.
 
