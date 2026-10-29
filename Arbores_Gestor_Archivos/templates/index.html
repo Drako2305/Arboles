@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbores | Explorador jerárquico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">A</div><div><strong>Arbores</strong><small>ESTRUCTURAS DE DATOS</small></div></div>
+      <div class="nav-label">ESPACIO DE TRABAJO</div>
+      <button class="nav-item active" data-view="explorer"><span>▦</span> Explorador</button>
+      <button class="nav-item" data-view="analytics"><span>◫</span> Análisis del árbol</button>
+      <button class="nav-item" data-view="traversals"><span>⌘</span> Recorridos</button>
+      <div class="sidebar-bottom"><div class="status-dot"></div><div><strong>Sistema operativo</strong><small>Simulación local activa</small></div></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar"><div><span class="eyebrow">ESPACIO PERSONAL</span><h1 id="page-title">Explorador de archivos</h1></div><div class="top-actions"><span class="local-pill"><i></i> Datos guardados localmente</span><button class="avatar">DR</button></div></header>
+
+      <section class="view active" id="view-explorer">
+        <div class="welcome-row"><div><h2>Tu espacio, organizado.</h2><p>Administra una estructura jerárquica mediante un árbol n-ario.</p></div><button class="button button-secondary" id="reset-button">↻ Restaurar demo</button></div>
+        <div class="stats-grid" id="stats-grid"></div>
+        <div class="workspace">
+          <section class="panel explorer-panel">
+            <div class="panel-heading"><div><h3>Explorador</h3><p>Navega por carpetas y archivos</p></div><div class="heading-actions"><input class="search-input" id="search-input" type="search" placeholder="Buscar archivo o carpeta…" aria-label="Buscar archivo o carpeta"><button class="icon-button" id="collapse-button" title="Contraer todo">−</button><button class="button button-primary" id="new-folder-button">＋ Nueva carpeta</button></div></div>
+            <div class="path-bar" id="path-bar">/ Mi unidad</div>
+            <div class="tree-area" id="tree-area"><div class="loading">Cargando estructura…</div></div>
+          </section>
+          <aside class="panel detail-panel">
+            <div class="panel-heading"><div><h3>Detalles</h3><p>Información del elemento seleccionado</p></div></div>
+            <div id="details-content" class="empty-details"><div class="empty-icon">⌁</div><strong>Selecciona un elemento</strong><p>Sus propiedades aparecerán aquí.</p></div>
+            <div class="quick-actions" id="quick-actions"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-analytics">
+        <div class="section-intro"><h2>Indicadores de la estructura</h2><p>Propiedades calculadas directamente sobre el árbol implementado en Python.</p></div>
+        <div class="stats-grid large" id="analytics-grid"></div>
+        <div class="panel concept-panel"><h3>Conceptos del árbol</h3><div class="concept-grid">
+          <article><span>01</span><h4>Raíz</h4><p>Primer nodo de la estructura. Representa “Mi unidad”.</p></article>
+          <article><span>02</span><h4>Padre e hijo</h4><p>Una carpeta es padre de los elementos que contiene.</p></article>
+          <article><span>03</span><h4>Hoja</h4><p>Nodo que no tiene hijos. En el modelo, los archivos son hojas.</p></article>
+          <article><span>04</span><h4>Grado</h4><p>Cantidad de hijos directos que tiene un nodo.</p></article>
+          <article><span>05</span><h4>Altura</h4><p>Longitud en niveles del camino más largo desde la raíz hasta una hoja.</p></article>
+          <article><span>06</span><h4>Peso</h4><p>Cantidad total de nodos que componen el árbol.</p></article>
+        </div></div>
+      </section>
+
+      <section class="view" id="view-traversals">
+        <div class="section-intro"><h2>Recorridos del árbol</h2><p>Compara dos estrategias para visitar los nodos de la estructura.</p></div>
+        <div class="panel traversal-panel">
+          <div class="traversal-controls"><div><h3>Explorar algoritmos</h3><p>Selecciona un método para visualizar el orden de visita.</p></div><div><button class="button button-secondary" data-traversal="dfs">Recorrido DFS</button><button class="button button-primary" data-traversal="bfs">Recorrido BFS</button></div></div>
+          <div id="traversal-result" class="traversal-result"><div class="empty-icon">⌘</div><strong>Selecciona un recorrido</strong><p>El resultado aparecerá en este espacio.</p></div>
+        </div>
+        <div class="comparison-grid"><article class="panel"><span class="tag">DFS</span><h3>Búsqueda en profundidad</h3><p>Explora una rama tanto como sea posible antes de retroceder. Se implementa mediante una pila.</p><code>O(n)</code></article><article class="panel"><span class="tag tag-blue">BFS</span><h3>Búsqueda en anchura</h3><p>Visita primero los nodos del nivel actual y después avanza al siguiente. Se implementa mediante una cola.</p><code>O(n)</code></article></div>
+      </section>
+      <footer>ARBORES <span>Proyecto académico · Estructuras de Datos</span></footer>
+    </main>
+  </div>
+
+  <dialog id="node-dialog" class="modal">
+    <form method="dialog" class="modal-close"><button aria-label="Cerrar">×</button></form>
+    <div class="modal-heading"><span class="modal-icon">＋</span><div><h3 id="dialog-title">Crear carpeta</h3><p id="dialog-description">Añade un elemento a la estructura.</p></div></div>
+    <form id="node-form">
+      <input type="hidden" id="parent-id">
+      <input type="hidden" id="node-type" value="folder">
+      <label for="node-name">Nombre del elemento</label><input id="node-name" maxlength="60" placeholder="Ej. Documentos" required>
+      <div class="form-actions"><button type="button" class="button button-secondary" id="cancel-dialog">Cancelar</button><button class="button button-primary" type="submit">Guardar elemento</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
